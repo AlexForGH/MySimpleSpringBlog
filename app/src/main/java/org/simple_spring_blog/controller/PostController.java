@@ -51,8 +51,8 @@ public class PostController {
 
     @GetMapping(postsAction)
     public String getAllPostsOrSearchPostsByTagWithPagination(
-            @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
-            @RequestParam(name = "page_size", defaultValue = "5") int pageSize,
+            @RequestParam(name = "pageNumber", defaultValue = "1") long pageNumber,
+            @RequestParam(name = "page_size", defaultValue = "5") long pageSize,
             @RequestParam(name = "search_tag", required = false) String searchTag,
             Model model
     ) {
@@ -61,7 +61,7 @@ public class PostController {
         model.addAttribute("posts", postsPage.getContent());
         model.addAttribute("postsAction", postsAction);
         model.addAttribute("addPostAction", addPostAction);
-        model.addAttribute("paging", new PagingInfoDto(
+        model.addAttribute("postsPage", new PagingInfoDto(
                 postsPage.getNumber() + 1,
                 postsPage.getTotalPages(),
                 postsPage.getSize(),
@@ -69,6 +69,7 @@ public class PostController {
                 postsPage.hasNext()
         ));
         model.addAttribute("search_tag", searchTag);
+        model.addAttribute("allPostsCount", postService.getCountOfAllPosts());
 
         return "posts";
     }

@@ -14,22 +14,30 @@
 <table style="width:50%;margin-left:auto;margin-right:auto;">
     <tr>
         <td>
-            <form method="GET" th:action="@{${postsAction}}">
+            <form method="GET" th:action="@{${postsAction}}" >
+                <input type="hidden" name="search_tag" th:value="@{${search_tag}}">
                 <p>
                     <label for="pageSize">Число постов на странице: </label>
                     <select id="pageSize" name="page_size" onchange="this.form.submit()">
-                        <option value="1" th:selected="${paging.pageSize()==1}">1</option>
-                        <option value="5" th:selected="${paging.pageSize()==5}">5</option>
-                        <option value="10" th:selected="${paging.pageSize()==10}">10</option>
-                        <option value="20" th:selected="${paging.pageSize()==20}">20</option>
+                        <option value="1" th:selected="@{${postsPage.pageSize()==1}}">1</option>
+                        <option value="5" th:selected="@{${postsPage.pageSize()==5}}">5</option>
+                        <option value="10" th:selected="@{${postsPage.pageSize()==10}}">10</option>
+                        <option value="20" th:selected="@{${postsPage.pageSize()==20}}">20</option>
                     </select>
                 </p>
                 <p>
-                    <button th:if="${paging.hasPrevious()}" name="pageNumber" th:value="${paging.pageNumber()-1}">
+                    <button
+                            th:if="@{${postsPage.hasPrevious()}}"
+                            name="pageNumber"
+                            th:value="@{${postsPage.pageNumber()-1}}">
                         &lt;
                     </button>
-                    <span th:text="${'Страница: '+paging.pageNumber()}"></span>
-                    <button th:if="${paging.hasNext()}" name="pageNumber" th:value="${paging.pageNumber()+1}">
+                    <span th:text="@{${'Страница: '+postsPage.pageNumber()}}"></span>
+                    <button
+                            th:if="@{${postsPage.hasNext()}}"
+                            name="pageNumber"
+                            th:value="@{${postsPage.pageNumber()+1}}"
+                    >
                         &gt;
                     </button>
                 </p>
@@ -41,15 +49,21 @@
         <td>
             <form method="GET" th:action="@{${postsAction}}">
                 <p>
-                    <label for="search">Найти по тегу: </label>
-                    <input id="search" style="width:300px;" name="search_tag" th:value="${search}">
+                    <input
+                            id="search"
+                            type="text"
+                            placeholder="Найти по тегу: "
+                            style="width:300px;"
+                            name="search_tag"
+                            th:value="@{${search_tag}}"
+                    >
                     <button name="action">&#128269;</button>
                 </p>
             </form>
         </td>
         <td>
             <p>
-                <label th:text="${'Всего постов: '+posts.size()}"></label>
+                <label th:text="@{${'Всего постов в системе: '+allPostsCount}}"></label>
             </p>
         </td>
     </tr>
@@ -62,10 +76,10 @@
                     <img height="300" th:src="@{${post.getImagePath()}}" alt="Image">
                 </a>
             </p>
-            <p th:text="${post.getText()}"></p>
+            <p th:text="@{${post.getText()}}"></p>
             <p>
-                <span th:text="${'&#x1F44D; '+post.getLikesCount()}"></span>
-                <span th:text="${'&#x2709; '+post.getComments().size()}"></span>
+                <span th:text="@{${'&#x1F44D; '+post.getLikesCount()}}"></span>
+                <span th:text="@{${'&#x2709; '+post.getComments().size()}}"></span>
             </p>
             <p>
                 <span th:each="tag : ${post.getTags()}" th:text="${'#'+tag+' '}"></span>

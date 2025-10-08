@@ -27,48 +27,61 @@ public class PostService {
         this.commentsRepository = commentsRepository;
     }
 
-    public Page<Post> getAllPostsOrByTagWithPagination(String searchTag, int pageNumber, int pageSize) {
+    public Page<Post> getAllPostsOrByTagWithPagination(String searchTag, long pageNumber, long pageSize) {
         List<Post> posts;
-        if (searchTag == null || searchTag.isEmpty()) posts = getAllPosts();
-        else posts = getPostsByTag(searchTag);
-        return paginateList(posts, pageNumber, pageSize);
-    }
+        long totalItems;
+        if (searchTag == null || searchTag.isEmpty()) {
+            posts = getAllPostsWithPaginationParams(pageNumber, pageSize);
+            totalItems = postRepository.getCountOfAllPosts();
+        } else {
+            posts = getPostsByTagWithPaginationParams(searchTag, pageNumber, pageSize);
+            totalItems = postRepository.getCountOfPostsByTag(searchTag);
+        }
 
-    private Page<Post> paginateList(List<Post> posts, int pageNumber, int pageSize) {
-        int totalItems = posts.size();
-        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+        long totalPages = (long) Math.ceil((double) totalItems / pageSize);
 
         if (pageNumber < 1) pageNumber = 1;
         if (pageNumber > totalPages && totalPages > 0) pageNumber = totalPages;
 
-        int fromIndex = (pageNumber - 1) * pageSize;
-        int toIndex = Math.min(fromIndex + pageSize, totalItems);
+        long fromIndex = (pageNumber - 1) * pageSize;
 
-        if (fromIndex >= totalItems)
-            return new PageImpl<>(List.of(), PageRequest.of(pageNumber - 1, pageSize), totalItems);
+        if (fromIndex >= totalItems) {
+            return new PageImpl<>(
+                    List.of(),
+                    PageRequest.of((int) (pageNumber - 1),
+                            (int) pageSize),
+                    totalItems
+            );
+        }
 
-        List<Post> pageContent = posts.subList(fromIndex, toIndex);
-        return new PageImpl<>(pageContent, PageRequest.of(pageNumber - 1, pageSize), totalItems);
+        return new PageImpl<>(
+                posts,
+                PageRequest.of((int) (pageNumber - 1),
+                        (int) pageSize),
+                totalItems
+        );
     }
 
-    public List<Post> getAllPosts() {
-        List<Post> posts = postRepository.getAllPosts();
+    private List<Post> getAllPostsWithPaginationParams(long pageNumber, long pageSize) {
+        List<Post> posts = postRepository.getAllPostsWithPaginationParams(pageNumber, pageSize);
         posts.forEach(post -> post.setComments(getCommentsByPostId(post.getId())));
         return posts;
+    }
+
+    private List<Post> getPostsByTagWithPaginationParams(String tag, long pageNumber, long pageSize) {
+        List<Post> posts = postRepository.getPostsByTagWithPaginationParams(tag, pageNumber, pageSize);
+        posts.forEach(post -> post.setComments(getCommentsByPostId(post.getId())));
+        return posts;
+    }
+
+    public long getCountOfAllPosts() {
+        return postRepository.getCountOfAllPosts();
     }
 
     public Post getPostById(Long id) {
         Post post = postRepository.getPostById(id);
         post.setComments(getCommentsByPostId(id));
         return post;
-    }
-
-    public List<Post> getPostsByTag(String tag) {
-        List<Post> allPosts = getAllPosts();
-        return allPosts
-                .stream()
-                .filter(post -> post.getTags().contains(tag))
-                .toList();
     }
 
     public void addPost(PostDto postDto, String imagePath) {

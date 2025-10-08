@@ -20,6 +20,21 @@ public class JdbcNativePostRepository implements PostRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
+    @Override
+    public long getCountOfAllPosts() {
+        return jdbcTemplate.queryForObject("select count(*) from posts", Long.class);
+    }
+
+    @Override
+    public long getCountOfPostsByTag(String tag) {
+        return jdbcTemplate.queryForObject(
+                "select count(*) from posts where lower(tags) like ?",
+                Long.class,
+                "%" + tag + "%"
+        );
+    }
+
     @Override
     public List<Post> getAllPosts() {
         return jdbcTemplate.query(
@@ -32,6 +47,38 @@ public class JdbcNativePostRepository implements PostRepository {
                         rs.getString("text"),
                         tagsFromDatabaseValue(rs.getString("tags"))
                 ));
+    }
+
+    @Override
+    public List<Post> getAllPostsWithPaginationParams(long pageNumber, long pageSize) {
+        return jdbcTemplate.query(
+                "select id, title, imagePath, likesCount, text, tags from " + dbName + " limit ? offset ?",
+                (rs, rowNum) -> new Post(
+                        rs.getLong("id"),
+                        rs.getString("title"),
+                        rs.getString("imagePath"),
+                        rs.getInt("likesCount"),
+                        rs.getString("text"),
+                        tagsFromDatabaseValue(rs.getString("tags"))
+                ),
+                pageSize, (pageNumber - 1) * pageSize
+        );
+    }
+
+    @Override
+    public List<Post> getPostsByTagWithPaginationParams(String tag, long pageNumber, long pageSize) {
+        return jdbcTemplate.query(
+                "select id, title, imagePath, likesCount, text, tags from " + dbName + " where lower(tags) like ? limit ? offset ?",
+                (rs, rowNum) -> new Post(
+                        rs.getLong("id"),
+                        rs.getString("title"),
+                        rs.getString("imagePath"),
+                        rs.getInt("likesCount"),
+                        rs.getString("text"),
+                        tagsFromDatabaseValue(rs.getString("tags"))
+                ),
+                "%" + tag + "%", pageSize, (pageNumber - 1) * pageSize
+        );
     }
 
     @Override
