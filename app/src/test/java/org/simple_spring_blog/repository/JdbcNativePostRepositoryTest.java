@@ -35,19 +35,33 @@ public class JdbcNativePostRepositoryTest {
     }
 
     @Test
-    void getAllPosts_WhenNoPosts_ShouldReturnEmptyList() {
+    void getAllPostsWithPaginationParams_WhenNoPosts_ShouldReturnEmptyList() {
         jdbcTemplate.execute("DELETE FROM posts");
-        List<Post> result = postRepository.getAllPosts();
+        List<Post> result = postRepository.getAllPostsWithPaginationParams(1, 5);
         assertTrue(result.isEmpty());
     }
 
     @Test
-    void getAllPosts_WhenPostsExist_ShouldReturnAllPosts() {
-        List<Post> result = postRepository.getAllPosts();
+    void getAllPostsWithPaginationParams_WhenPostsExist_ShouldReturnAllPosts() {
+        List<Post> result = postRepository.getAllPostsWithPaginationParams(1, 5);
         assertEquals(3, result.size());
         assertEquals("proger", result.get(0).getTitle());
         assertEquals("manager", result.get(1).getTitle());
         assertEquals("devops", result.get(2).getTitle());
+    }
+
+    @Test
+    void getPostsByTagWithPaginationParams_WhenNoPosts_ShouldReturnEmptyList() {
+        jdbcTemplate.execute("DELETE FROM posts");
+        List<Post> result = postRepository.getPostsByTagWithPaginationParams("tag33", 1, 5);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void getPostsByTagWithPaginationParams_WhenPostsExist_ShouldReturnAllPosts() {
+        List<Post> result = postRepository.getPostsByTagWithPaginationParams("tag1", 1, 5);
+        assertEquals(1, result.size());
+        assertEquals("proger", result.get(0).getTitle());
     }
 
     @Test

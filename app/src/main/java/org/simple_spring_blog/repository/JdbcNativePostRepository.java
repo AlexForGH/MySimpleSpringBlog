@@ -36,20 +36,6 @@ public class JdbcNativePostRepository implements PostRepository {
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        return jdbcTemplate.query(
-                "select id, title, imagePath, likesCount, text, tags from " + dbName,
-                (rs, rowNum) -> new Post(
-                        rs.getLong("id"),
-                        rs.getString("title"),
-                        rs.getString("imagePath"),
-                        rs.getInt("likesCount"),
-                        rs.getString("text"),
-                        tagsFromDatabaseValue(rs.getString("tags"))
-                ));
-    }
-
-    @Override
     public List<Post> getAllPostsWithPaginationParams(long pageNumber, long pageSize) {
         return jdbcTemplate.query(
                 "select id, title, imagePath, likesCount, text, tags from " + dbName + " limit ? offset ?",

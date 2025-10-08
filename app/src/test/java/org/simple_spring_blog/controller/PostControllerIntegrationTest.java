@@ -101,7 +101,8 @@ public class PostControllerIntegrationTest {
                         "posts",
                         "postsAction",
                         "addPostAction",
-                        "paging")
+                        "postsPage",
+                        "allPostsCount")
                 )
                 .andExpect(model().attribute("posts", posts));
     }
