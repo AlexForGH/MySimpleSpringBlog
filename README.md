@@ -1,10 +1,11 @@
 # MySimpleSpringBlog
 
-*EN*
+## *EN*
+#### Link to the following project using Spring Boot: https://github.com/AlexForGH/MySimpleSpringBootBlog.git
 A simple project to demonstrate basic development capabilities using the Spring framework.
 Technology stack: Spring Framework, H2DB, HTML, Thymeleaf, Junit5, Mockito.
 
-Application features:
+### Application features:
     - adding posts
     - editing posts
     - deleting posts
@@ -13,7 +14,7 @@ Application features:
     - editing comments to posts
     - deleting comments to posts
 
-Application deployment:
+### Application deployment:
     - Before you begin, you'll need:
               - Tomcat Server (version 10.1.26 was used during project development): download the archive
                 from the official website and unzip it to a convenient location
@@ -29,26 +30,27 @@ Application deployment:
             - clone the repository
             - enter the command ./gradlew clean build in the root of the project folder
             - a file will appear in the app/build/libs folder app-1.0-SNAPSHOT.war
-            - Copy this file to the Tomcat Server folder: /tomcat/webapps
-            - Run the startup.sh script in the /tomcat/bin folder. This will start the server and deploy the application.
-            - Open a browser at http://localhost:8080/app-1.0-SNAPSHOT/posts
-            - The application's start page will open.
-            - When finished, run the shutdown.sh script in the /tomcat/bin folder to stop the application.
+            - copy this file to the Tomcat Server folder: /tomcat/webapps
+            - run the startup.sh script in the /tomcat/bin folder. This will start the server and deploy the application.
+            - open a browser at http://localhost:8080/app-1.0-SNAPSHOT/posts
+            - the application's start page will open.
+            - when finished, run the shutdown.sh script in the /tomcat/bin folder to stop the application.
 
-Testing the application:
+### Testing the application:
     1. Using an IDE (IntelliJIdea was used during project development):
-            - Right-click on the test folder and select "Run Tests in 'MySimpleSpringBlog'"
-            - All tests in the project will run.
+            - right-click on the test folder and select "Run Tests in 'MySimpleSpringBlog'"
+            - all tests in the project will run.
     2. Without an IDE
-            - Open a terminal in the project folder and enter the command: ./gradlew test
-            - All tests in the project will run.
+            - open a terminal in the project folder and enter the command: ./gradlew test
+            - all tests in the project will run.
 
 
-*RU*
+## *RU*
+#### Ссылка на следующий проект с использованием Spring Boot: https://github.com/AlexForGH/MySimpleSpringBootBlog.git
 Простой проект для демонстрации базовых возможностей разработки с использованием фреймворка Spring.
 Технологический стек: Spring Framework, H2DB, HTML, Thymeleaf, Junit5, Mockito.
 
-Возможности приложения:
+### Возможности приложения:
     - добавление постов
     - редактирование постов
     - удаление постов
@@ -57,7 +59,7 @@ Testing the application:
     - редактирование комментариев к постам
     - удаление комментариев к постам
 
-Развертывание приложения:
+### Развертывание приложения:
     - Перед началом работы необходимы:
             - Tomcat Server (при разработке проекта использовалась версия 10.1.26): скачать архив
               с официального сайта и распаковать в удобное место
@@ -79,7 +81,7 @@ Testing the application:
             - откроется стартовая страница приложения
             - по завершению работы в папке /tomcat/bin выполнить скрипт shutdown.sh для остановки приложения
 
-Тестирование приложения:
+### Тестирование приложения:
     1. Через IDE (при разработке проекта использовалась IntelliJIdea):
             - на папке test нажать ПКМ и выбрать пункт "Run Tests in 'MySimpleSpringBlog'"
             - запустятся все тесты проекта
